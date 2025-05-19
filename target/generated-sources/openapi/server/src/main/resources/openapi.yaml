@@ -1,0 +1,416 @@
+openapi: 3.1.0
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+    url: https://docs.example.com/document-service
+  description: |
+    The Document Service offers CRUD operations, fine-grained version control,
+    and cursor-based pagination for documents of any MIME type.
+    All responses use standard HTTP semantics and are wrapped (where useful) in
+    reusable schemas for consistency and future extensibility.
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: Document Service API
+  version: 1.0.0
+servers:
+- description: development
+  url: http://localhost:8080
+tags:
+- description: Document CRUD and metadata
+  name: Documents
+- description: Per-document version history
+  name: Versions
+- description: Operational health checks
+  name: Health
+paths:
+  /documents:
+    get:
+      operationId: listDocuments
+      responses:
+        "200":
+          $ref: '#/components/responses/DocumentList'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+      summary: List documents
+      tags:
+      - Documents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: Document created
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+      summary: Create a new document
+      tags:
+      - Documents
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+  /documents/{documentId}:
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/documentId'
+      responses:
+        "204":
+          description: Document removed
+        "404":
+          $ref: '#/components/responses/NotFound'
+      security:
+      - bearerAuth: []
+      summary: Permanently delete a document
+      tags:
+      - Documents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+    get:
+      parameters:
+      - $ref: '#/components/parameters/documentId'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: Metadata returned
+        "404":
+          $ref: '#/components/responses/NotFound'
+      security:
+      - bearerAuth: []
+      summary: Retrieve a document’s metadata
+      tags:
+      - Documents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+    parameters:
+    - $ref: '#/components/parameters/documentId'
+    put:
+      parameters:
+      - $ref: '#/components/parameters/documentId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        required: true
+      responses:
+        "200":
+          $ref: '#/components/responses/DocumentSingle'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+      security:
+      - bearerAuth: []
+      summary: Replace document metadata
+      tags:
+      - Documents
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+  /v1/documents:
+    get:
+      responses:
+        "200":
+          $ref: '#/components/responses/DocumentList'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+      summary: List documents
+      tags:
+      - Documents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: Document created
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+      summary: Create a new document
+      tags:
+      - Documents
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+  /v1/documents/{documentId}:
+    delete:
+      parameters:
+      - $ref: '#/components/parameters/documentId'
+      responses:
+        "204":
+          description: Document removed
+        "404":
+          $ref: '#/components/responses/NotFound'
+      security:
+      - bearerAuth: []
+      summary: Permanently delete a document
+      tags:
+      - Documents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+    get:
+      parameters:
+      - $ref: '#/components/parameters/documentId'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: Metadata returned
+        "404":
+          $ref: '#/components/responses/NotFound'
+      security:
+      - bearerAuth: []
+      summary: Retrieve a document’s metadata
+      tags:
+      - Documents
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+    parameters:
+    - $ref: '#/components/parameters/documentId'
+    put:
+      parameters:
+      - $ref: '#/components/parameters/documentId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        required: true
+      responses:
+        "200":
+          $ref: '#/components/responses/DocumentSingle'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+      security:
+      - bearerAuth: []
+      summary: Replace document metadata
+      tags:
+      - Documents
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Documents
+components:
+  parameters:
+    documentId:
+      description: Unique document identifier (UUID)
+      explode: false
+      in: path
+      name: documentId
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+  responses:
+    DocumentList:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentList'
+      description: Paginated list of documents
+    DocumentSingle:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Document'
+      description: A single document
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Validation failed
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authentication failed
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Resource not found
+  schemas:
+    Document:
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        size: 0
+        checksum: checksum
+        description: description
+        latestVersionId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: title
+        contentType: application/pdf
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          format: uuid
+          type: string
+        title:
+          maxLength: 256
+          type: string
+        description:
+          maxLength: 2048
+          type: string
+        contentType:
+          example: application/pdf
+          type: string
+        size:
+          description: Document size in bytes
+          minimum: 0
+          type: integer
+        checksum:
+          description: SHA-256 checksum (hex)
+          type: string
+        latestVersionId:
+          format: uuid
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+      - contentType
+      - createdAt
+      - id
+      - size
+      - title
+      - updatedAt
+    DocumentList:
+      example:
+        items:
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          size: 0
+          checksum: checksum
+          description: description
+          latestVersionId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          title: title
+          contentType: application/pdf
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          size: 0
+          checksum: checksum
+          description: description
+          latestVersionId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          title: title
+          contentType: application/pdf
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/Document'
+          type: array
+      required:
+      - items
+    Error:
+      example:
+        code: NOT_FOUND
+        details:
+        - field: field
+          issue: issue
+        - field: field
+          issue: issue
+        message: Document not found
+      properties:
+        code:
+          description: Machine readable error code
+          example: NOT_FOUND
+          type: string
+        message:
+          description: Human readable description
+          example: Document not found
+          type: string
+        details:
+          description: Field-level validation errors (if any)
+          items:
+            $ref: '#/components/schemas/Error_details_inner'
+          type: array
+      required:
+      - code
+      - message
+    Error_details_inner:
+      example:
+        field: field
+        issue: issue
+      properties:
+        field:
+          type: string
+        issue:
+          type: string
+      required:
+      - field
+      - issue
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+    apiKey:
+      in: header
+      name: X-API-Key
+      type: apiKey

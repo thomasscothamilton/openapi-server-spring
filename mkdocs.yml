@@ -1,0 +1,26 @@
+site_name: openapi-server-spring
+
+theme:
+  name: material
+  features:
+    - navigation.top
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - primary: blue
+      accent: blue
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+nav:
+  - Overview: index.md
+
+repo_name: GitHub

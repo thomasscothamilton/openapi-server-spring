@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: openapi-server-spring
+    environment:
+      SPRINT_PROFILES_ACTIVE: local
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

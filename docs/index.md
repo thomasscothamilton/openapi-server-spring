@@ -51,15 +51,5 @@ docker run -p 8080:8080 openapi-server-spring
 ## Docker compose
 
 ```shell
-docker-compose up
-```
-
-## Helm
-
-```shell
-docker build -t openapi-server-spring .
-```
-
-```shell
-helm install openapi-server-spring ./helm/openapi-server-spring
+docker-compose up --build
 ```

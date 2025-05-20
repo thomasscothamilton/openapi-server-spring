@@ -1,0 +1,42 @@
+# Java/Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+*.log
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA
+*.iml
+.idea/
+out/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build/test artifacts
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# Generated OpenAPI code
+src/main/java/org/openapitools/generated/
+target/generated-sources/
+target/generated-test-sources/
+
+# Misc
+.env
+*.local
+
+# Ignore application secrets
+src/main/resources/application-local.yaml

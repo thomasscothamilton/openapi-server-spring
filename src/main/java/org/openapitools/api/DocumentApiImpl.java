@@ -79,6 +79,18 @@ public class DocumentApiImpl implements DocumentsApiDelegate {
     }
 
     @Override
+    public Mono<ResponseEntity<Document>> v1DocumentsDocumentIdGet(UUID documentId, ServerWebExchange exchange) {
+        Document sample = new Document();
+        sample.setId(documentId);
+        sample.setTitle("Sample Document");
+        sample.setContentType("application/pdf");
+        sample.setCreatedAt(java.time.OffsetDateTime.now());
+        sample.setUpdatedAt(java.time.OffsetDateTime.now());
+
+        return Mono.just(ResponseEntity.ok(sample));
+    }
+
+    @Override
     public Mono<ResponseEntity<Document>> v1DocumentsPost(Mono<Document> document, ServerWebExchange exchange) {
         Document sample = new Document();
         sample.setId(java.util.UUID.randomUUID());
